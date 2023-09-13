@@ -74,6 +74,20 @@ public class InMemoryPersistenceTest {
         
     }
 
+
+    @Test
+    public void addNewBlueprintTest() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        BlueprintsServices servicio = ac.getBean(BlueprintsServices.class);
+        Blueprint bp=new Blueprint("Miguel", "Puteadero");
+        try {
+            servicio.addNewBlueprint(bp);
+            assertEquals(servicio.getAllBlueprints().size(), 2);
+        } catch (BlueprintNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Test
     public void getBlueprintTest()  {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -88,7 +102,6 @@ public class InMemoryPersistenceTest {
 
     }
 
-    
     @Test
     public void getBlueprintsByAuthorTest(){
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
