@@ -10,9 +10,14 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
+import edu.eci.arsw.blueprints.services.BlueprintsServices;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import static org.junit.Assert.*;
 
 /**
@@ -67,6 +72,60 @@ public class InMemoryPersistenceTest {
         }
                 
         
+    }
+
+    @Test
+    public void getBlueprintTest()  {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        BlueprintsServices servicio = ac.getBean(BlueprintsServices.class);
+        Blueprint bp=new Blueprint("Jaider", "Hospital");
+        try {
+            servicio.addNewBlueprint(bp);
+            assertEquals(servicio.getBlueprint("Jaider", "Hospital"), bp);
+        } catch (BlueprintNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    
+    @Test
+    public void getBlueprintsByAuthorTest(){
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        BlueprintsServices servicio = ac.getBean(BlueprintsServices.class);
+        Blueprint bp=new Blueprint("Jaider", "Hospital");
+        Blueprint bc=new Blueprint("Jaider", "Bloque F");
+        Blueprint ba=new Blueprint("Jaider", "Casa Jaider");
+        
+        try {
+            servicio.addNewBlueprint(bp);
+            servicio.addNewBlueprint(bc);
+            servicio.addNewBlueprint(ba);
+            assertEquals(servicio.getBlueprintsByAuthor("Jaider").size(), 3);
+        } catch (BlueprintNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Test
+    public void getAllBlueprintsTest() {
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        BlueprintsServices servicio = ac.getBean(BlueprintsServices.class);
+        Blueprint bp=new Blueprint("Jaider", "Hospital");
+        Blueprint bc=new Blueprint("Jaider", "Bloque F");
+        Blueprint ba=new Blueprint("Jaider", "Casa Jaider");
+        Blueprint bo=new Blueprint("Jaider", "Casa Miguel");
+        
+        try {
+            servicio.addNewBlueprint(bp);
+            servicio.addNewBlueprint(bc);
+            servicio.addNewBlueprint(ba);
+            servicio.addNewBlueprint(bo);
+            assertEquals(servicio.getAllBlueprints().size(), 5);
+        } catch (BlueprintNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
