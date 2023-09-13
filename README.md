@@ -9,12 +9,22 @@ Para ilustrar el uso del framework Spring, y el ambiente de desarrollo para el u
 1. Abra el los fuentes del proyecto en NetBeans.
 
 2. Revise el archivo de configuración de Spring ya incluido en el proyecto (src/main/resources). El mismo indica que Spring buscará automáticamente los 'Beans' disponibles en el paquete indicado.
+	![](img/xml.png)
+	`<?xml version="1.0" encoding="UTF-8"?>`: Esta línea especifica la versión del XML y la codificación utilizada. En este caso, se utiliza la versión 1.0 y la codificación UTF-8.
 
+	`<beans xmlns="http://www.springframework.org/schema/beans" ...>`: Este elemento raíz `<beans>` define un contenedor de configuración de Spring. Los atributos `xmlns` y `xmlns:xsi` definen los espacios de nombres XML que se utilizan en el archivo. El atributo `xmlns` se utiliza para el espacio de nombres de beans de Spring, y el atributo `xmlns:xsi` se utiliza para el espacio de nombres del esquema XML.
+
+	`xsi:schemaLocation="http://www.springframework.org/schema/beans ..."`: Este atributo `xsi:schemaLocation` especifica la ubicación de los esquemas XML que se utilizarán para validar el archivo. Define las ubicaciones de los esquemas XML para los espacios de nombres `http://www.springframework.org/schema/beans` y `http://www.springframework.org/schema/context`. Esto es importante para validar que el archivo de configuración cumple con las reglas definidas en los esquemas de Spring.
+
+	`<context:component-scan base-package="edu.eci.arsw" />`: Este es el elemento principal de configuración en este fragmento. Utiliza el espacio de nombres `context` y la etiqueta `component-scan` para configurar el escaneo de componentes en el proyecto. El atributo `base-package` especifica el paquete base (`edu.eci.arsw`) en el que Spring buscará componentes anotados, como clases de servicio, controladores y otros componentes relacionados con la aplicación. Spring escaneará este paquete y sus subpaquetes en busca de clases anotadas con anotaciones como `@Component`, `@Service`, `@Repository`, etc.
 3. Haciendo uso de la [configuración de Spring basada en anotaciones](https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-spring-beans-and-dependency-injection.html) marque con las anotaciones @Autowired y @Service las dependencias que deben inyectarse, y los 'beans' candidatos a ser inyectadas -respectivamente-:
 
 	* GrammarChecker será un bean, que tiene como dependencia algo de tipo 'SpellChecker'.
+		![](img/3p1.png)
 	* EnglishSpellChecker y SpanishSpellChecker son los dos posibles candidatos a ser inyectados. Se debe seleccionar uno, u otro, mas NO ambos (habría conflicto de resolución de dependencias). Por ahora haga que se use EnglishSpellChecker.
- 
+		![](img/english.png)
+		![](img/spanish.png)
+		![](img/grammar.png)
 5.	Haga un programa de prueba, donde se cree una instancia de GrammarChecker mediante Spring, y se haga uso de la misma:
 
 	```java
@@ -24,9 +34,11 @@ Para ilustrar el uso del framework Spring, y el ambiente de desarrollo para el u
 		System.out.println(gc.check("la la la "));
 	}
 	```
-	
-6.	Modifique la configuración con anotaciones para que el Bean ‘GrammarChecker‘ ahora haga uso del  la clase SpanishSpellChecker (para que a GrammarChecker se le inyecte EnglishSpellChecker en lugar de  SpanishSpellChecker. Verifique el nuevo resultado.
-
+	<b>prueba:</b>
+	![](img/5.png)
+6.	Modifique la configuración con anotaciones para que el Bean ‘GrammarChecker‘ ahora haga uso del  la clase SpanishSpellChecker (para que a GrammarChecker se le inyecte SpanishSpellChecker en lugar de EnglishSpellChecker. Verifique el nuevo resultado.
+	![](img/6.png)
+	![](img/6p.png)
 
 # Componentes y conectores - Parte I.
 
