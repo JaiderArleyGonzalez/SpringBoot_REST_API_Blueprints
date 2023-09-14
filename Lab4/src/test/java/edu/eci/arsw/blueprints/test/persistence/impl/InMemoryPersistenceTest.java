@@ -12,6 +12,9 @@ import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.impl.InMemoryBlueprintPersistence;
 import edu.eci.arsw.blueprints.services.BlueprintsServices;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Test;
@@ -79,10 +82,10 @@ public class InMemoryPersistenceTest {
     public void addNewBlueprintTest() {
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
         BlueprintsServices servicio = ac.getBean(BlueprintsServices.class);
-        Blueprint bp=new Blueprint("Miguel", "Puteadero");
+        Blueprint bp=new Blueprint("Miguel", "parque");
         try {
             servicio.addNewBlueprint(bp);
-            assertEquals(servicio.getAllBlueprints().size(), 2);
+            assertEquals(servicio.getAllBlueprints().size(), 1);
         } catch (BlueprintNotFoundException e) {
             e.printStackTrace();
         }
@@ -135,12 +138,42 @@ public class InMemoryPersistenceTest {
             servicio.addNewBlueprint(bc);
             servicio.addNewBlueprint(ba);
             servicio.addNewBlueprint(bo);
-            assertEquals(servicio.getAllBlueprints().size(), 5);
+            assertEquals(servicio.getAllBlueprints().size(), 4);
         } catch (BlueprintNotFoundException e) {
             e.printStackTrace();
         }
     }
+    @Test
+    public void aplicarFiltroTest(){
+        ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+        BlueprintsServices ibpp = ac.getBean(BlueprintsServices.class);
+        
+        Point[] pts2=new Point[]{new Point(10, 10),new Point(20, 20),new Point(20, 20)};
+        Blueprint bp2=new Blueprint("john", "parque",pts2);
 
+        try{
+            ibpp.addNewBlueprint(bp2);
+            
+        }
+        catch (BlueprintNotFoundException ex){
+            fail("Blueprint persistence failed inserting the first blueprint.");
+        }
+        Set<Blueprint> blueprints;
+        
+        blueprints = ibpp.aplicarFiltro();
+        
+        for (Blueprint blueprint : blueprints) {
+            //Redundancia
+            //assertEquals(2,blueprint.getPoints().size());
+            
+            //Submuestreo
+            assertEquals(2,blueprint.getPoints().size());
+            
+        }
+       
+        
+
+    }
 
     
 }

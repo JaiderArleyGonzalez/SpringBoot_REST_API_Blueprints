@@ -10,6 +10,8 @@ import edu.eci.arsw.blueprints.model.Point;
 import edu.eci.arsw.blueprints.persistence.BlueprintNotFoundException;
 import edu.eci.arsw.blueprints.persistence.BlueprintPersistenceException;
 import edu.eci.arsw.blueprints.persistence.BlueprintsPersistence;
+import edu.eci.arsw.blueprints.persistence.Filtro;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +28,10 @@ public class BlueprintsServices {
    
     @Autowired
     BlueprintsPersistence bpp;
+    
+    @Autowired
+    @Qualifier("Submuestreo")
+    Filtro filtro;
 
     public BlueprintsServices() {
     }
@@ -72,5 +78,11 @@ public class BlueprintsServices {
         return bpp.getBlueprintsByAuthor(author);
         
     }
-    
+    public Set<Blueprint> aplicarFiltro(){
+        try {
+            return filtro.aplicarFiltro(bpp.getAllBlueprints());
+        } catch (BlueprintNotFoundException e) {
+            return null;
+        }   
+    }
 }
