@@ -143,6 +143,8 @@ public class InMemoryPersistenceTest {
             e.printStackTrace();
         }
     }
+
+
     @Test
     public void aplicarFiltroTest(){
         ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -171,8 +173,6 @@ public class InMemoryPersistenceTest {
             
         }
        
-        
-
     }
 
     
